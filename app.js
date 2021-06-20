@@ -6,6 +6,7 @@ const checks = require('./checks.js');
 const sleep = async (ms=1000)=>new Promise((r,_)=>setTimeout(r,ms));
 
 async function main() {
+  console.log("Starting checks");
   while(true) {
     try {
       for (let checkKey in checks) {
@@ -15,13 +16,21 @@ async function main() {
           continue;
         }
         let [ok, message] = await check.check();
-        console.log(checkKey, ok, message);
         if (ok && check.pdIncident) {
           // clear the incident so we can make future ones
           check.pdIncident = null;
+          check.failCount = 0;
         } else if (!ok && !check.pdIncident) {
-          // not ok but no incident exists, create it
-          check.pdIncident = await createIncident(check.title);
+          if (check.failCount > 2) {
+            // not ok but no incident exists, create it
+            check.pdIncident = await createIncident(check.title);
+          } else {
+            if (check.failCount === undefined) {
+              check.failCount = 1;
+            } else {
+              check.failCount = check.failCount+1;
+            }
+          }
         }
         await sleep(1000);
       }
@@ -33,7 +42,6 @@ async function main() {
 }
 
 async function createIncident(title) {
-  console.log("New incident!", title);
   let resp = await pd.post('/incidents', { data: {
     incident: { 
       type: "incident",
@@ -46,6 +54,7 @@ async function createIncident(title) {
   }, headers: {
     From: pagerDutyEmail
   }})
+  console.log("Created PagerDuty incident:", title);
   return resp.data;
 }
 

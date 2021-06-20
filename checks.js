@@ -1,7 +1,7 @@
 const axios = require('axios');
 const getAlerts = require('./grafana');
 const httpClient = axios.create();
-httpClient.defaults.timeout = 5000;
+httpClient.defaults.timeout = 10000;
 
 module.exports = {
   monitoringServerStatus: {

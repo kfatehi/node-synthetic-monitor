@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { grafanaApiToken, grafanaApiAlertsEndpoint } = require('./config');
 const httpClient = axios.create();
-httpClient.defaults.timeout = 5000;
+httpClient.defaults.timeout = 10000;
 
 module.exports = async function() {
   let resp = await httpClient.get(grafanaApiAlertsEndpoint, {
