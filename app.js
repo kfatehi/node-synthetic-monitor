@@ -21,9 +21,9 @@ async function main() {
           check.pdIncident = null;
           check.failCount = 0;
         } else if (!ok && !check.pdIncident) {
-          if (check.failCount > 2) {
+          if (check.failCount > 5) {
             // not ok but no incident exists, create it
-            check.pdIncident = await createIncident(check.title);
+            check.pdIncident = await createIncident(check.title+": "+message);
           } else {
             if (check.failCount === undefined) {
               check.failCount = 1;
