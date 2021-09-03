@@ -16,6 +16,11 @@ async function main() {
           continue;
         }
         let [ok, message] = await check.check();
+        if (ok) {
+          console.log("[OK]", check.title, message);
+        } else {
+          console.log("[BAD]", check.title, message);
+        }
         if (ok && check.pdIncident) {
           // clear the incident so we can make future ones
           check.pdIncident = null;

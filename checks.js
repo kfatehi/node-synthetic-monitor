@@ -7,7 +7,8 @@ const DONT_CALL_ME_FOR_THESE_GRAFANA_ALERTS = {
   "Passenger Session Durations alert":true,
   "Passenger Session Durations alert":true,
   'Websocket Server Memory Usage alert':true,
-  'Average Request Duration (web001) alert': true
+  'Average Request Duration (web001) alert': true,
+  'DBConnections alert': true
 }
 
 module.exports = {
