@@ -17,25 +17,19 @@ async function main() {
         }
         let [ok, message] = await check.check();
         if (ok) {
+          check.failCount = 0;
           console.log("[OK]", check.failCount, check.title, message);
         } else {
+          check.failCount = check.failCount+1;
           console.log("[BAD]", check.failCount, check.title, message);
         }
         if (ok && check.pdIncident) {
           // clear the incident so we can make future ones
           check.pdIncident = null;
           check.failCount = 0;
-        } else if (!ok && !check.pdIncident) {
-          if (check.failCount > 5) {
-            // not ok but no incident exists, create it
-            check.pdIncident = await createIncident(check.title+": "+message);
-          } else {
-            if (check.failCount === undefined) {
-              check.failCount = 1;
-            } else {
-              check.failCount = check.failCount+1;
-            }
-          }
+        } else if (!ok && !check.pdIncident && check.failCount > 5) {
+          // not ok but no incident exists, create it
+          check.pdIncident = await createIncident(check.title+": "+message);
         }
         await sleep(1000);
       }
