@@ -1,13 +1,13 @@
 const axios = require('axios');
 const getAlerts = require('./grafana');
 const httpClient = axios.create();
+const certCheck = require('./certcheck');
 httpClient.defaults.timeout = 10000;
 
 const DONT_CALL_ME_FOR_THESE_GRAFANA_ALERTS = {
   "Passenger Session Durations alert":true,
   "Passenger Session Durations alert":true,
   'Websocket Server Memory Usage alert':true,
-  'Average Request Duration (web001) alert': true,
   'DBConnections alert': true
 }
 
@@ -67,5 +67,13 @@ module.exports = {
         return [false, err.message];
       }
     }
+  },
+  websiteCert: {
+    title: "Website certificate expiration",
+    check: certCheck('bigpurpledot.com')
+  },
+  websocketCert: {
+    title: "Web socket certificate expiration",
+    check: certCheck('websockets.bigpurpledot.com')
   }
 }
