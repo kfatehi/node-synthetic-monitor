@@ -26,6 +26,7 @@ module.exports = {
   },
   monitoringServerAlerting: {
     title: "Grafana is alerting!",
+    skipSlackAlert: true,
     pdIncident: null,
     dependsOn: 'monitoringServerStatus',
     check: async ()=>{
@@ -75,5 +76,22 @@ module.exports = {
   websocketCert: {
     title: "Web socket certificate expiration",
     check: certCheck('websockets.bigpurpledot.com')
-  }
+  },
+  // someFakeThing: {
+  //   title: "Just a fake thing",
+  //   pdIncident: null,
+  //   check: async ()=>{
+  //     try {
+  //       let resp = await httpClient.get('https://bigpurpledot.com/foobar');
+  //       let ok = resp.data.includes("Automatically distribute to your team members")
+  //       if (ok) {
+  //         return [true, 'ok'];
+  //       } else {
+  //         return [false, "did not include string"];
+  //       }
+  //     } catch(err) {
+  //       return [false, err.message];
+  //     }
+  //   }
+  // },
 }

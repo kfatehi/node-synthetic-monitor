@@ -1,7 +1,8 @@
 const pagerduty = require('@pagerduty/pdjs');
-const { pagerDutyServiceId, pagerDutyEmail, pagerDutyApiToken } = require('./config');
+const { pagerDutyServiceId, pagerDutyEmail, pagerDutyApiToken, slackAlertEndpoint } = require('./config');
 const pd = pagerduty.api({token: pagerDutyApiToken});
 const checks = require('./checks.js');
+const axios = require('axios');
 
 const sleep = async (ms=1000)=>new Promise((r,_)=>setTimeout(r,ms));
 
@@ -20,8 +21,14 @@ async function main() {
           check.failCount = 0;
           console.log("[OK]", check.failCount, check.title, message);
         } else {
+          if (isNaN(check.failCount)) check.failCount = 0;
           check.failCount = check.failCount+1;
           console.log("[BAD]", check.failCount, check.title, message);
+          if (slackAlertEndpoint && !check.skipSlackAlert) {
+            axios.post(slackAlertEndpoint, {
+              text: `"${message}" for check "${check.title}", count: ${check.failCount}`
+            });
+          }
         }
         if (ok && check.pdIncident) {
           // clear the incident so we can make future ones
