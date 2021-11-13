@@ -36,7 +36,7 @@ module.exports = {
         let alerts = await getAlerts();
         for (let i = 0; i<alerts.length; i++) {
           let a = alerts[i];
-          let nominal = a.state === 'ok' || a.state === 'pending' || a.state === 'unknown';
+          let nominal = a.state === 'ok' || a.state === 'pending' || a.state === 'unknown' || a.state === "paused";
           if (!nominal && !DONT_CALL_ME_FOR_THESE_GRAFANA_ALERTS[a.name]) {
             failMessage.push(a.name+" is "+a.state)
             allNominal = false;
