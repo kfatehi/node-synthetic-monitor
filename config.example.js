@@ -1,11 +1,11 @@
-require('./src').main({
-  config: {
-    pagerDutyApiToken: '',
-    pagerDutyServiceId: '',
-    pagerDutyEmail: '',
-    grafanaApiToken: '',
-    grafanaApiAlertsEndpoint: '',
-  },
+const checks = require('./checks');
+
+module.exports = {
+  pagerDutyApiToken: '',
+  pagerDutyServiceId: '',
+  pagerDutyEmail: '',
+  grafanaApiToken: '',
+  grafanaApiAlertsEndpoint: '',
   checks: {
     monitoringServerStatus: {
       title: "Grafana is not responding!",
@@ -40,4 +40,4 @@ require('./src').main({
       check: check.webCertificate('websockets.bigpurpledot.com')
     }
   }
-});
+}

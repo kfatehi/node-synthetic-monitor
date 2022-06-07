@@ -1,0 +1,1 @@
+finish refactoring, trying to make config functionally inputted into each check that needs it rather than having random source files require a config and then make it a node package thats just easy to consume as a single file w/ a depdency pull
